@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { JsonLd } from '@/components/seo/JsonLd'
-import './globals.css'
 
 const inter = Inter({
   subsets: ['latin'],

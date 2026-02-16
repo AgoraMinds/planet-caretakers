@@ -2,7 +2,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { buildConfig } from 'payload'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
-// import { postgresAdapter } from '@payloadcms/db-postgres' // Uncomment for production
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
@@ -78,15 +78,15 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'src/payload-types.ts'),
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || 'file:./planet-caretakers.db',
-    },
-  }),
-  // For production with PostgreSQL, replace the above with:
-  // db: postgresAdapter({
-  //   pool: { connectionString: process.env.DATABASE_URI || '' },
-  // }),
+  db: process.env.DATABASE_URL
+    ? postgresAdapter({
+        pool: { connectionString: process.env.DATABASE_URL },
+      })
+    : sqliteAdapter({
+        client: {
+          url: process.env.DATABASE_URI || 'file:./planet-caretakers.db',
+        },
+      }),
   sharp,
   plugins: [
     seoPlugin({

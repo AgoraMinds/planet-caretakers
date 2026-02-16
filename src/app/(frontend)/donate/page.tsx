@@ -6,6 +6,7 @@ import { Container } from '@/components/layout/Container'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Donate | Planet Caretakers',
   description: 'Support Planet Caretakers with a donation. Every contribution helps us clean, protect, and restore our planet.',

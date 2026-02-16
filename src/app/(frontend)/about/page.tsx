@@ -9,6 +9,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'About Us | Planet Caretakers',
   description: 'Learn about Planet Caretakers, our story, vision, and the team behind our mission.',

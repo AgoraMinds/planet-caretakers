@@ -10,6 +10,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Badge } from '@/components/ui/Badge'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Volunteers | Planet Caretakers',
   description: 'Meet our volunteer leaders across Portugal and the world.',

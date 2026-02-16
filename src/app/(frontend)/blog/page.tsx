@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Container } from '@/components/layout/Container'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Blog | Planet Caretakers',
   description: 'Latest news, stories, and updates from Planet Caretakers.',

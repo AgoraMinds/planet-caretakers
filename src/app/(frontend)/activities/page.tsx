@@ -6,6 +6,7 @@ import { EventsCarousel } from '@/components/sections/EventsCarousel'
 import { CTABanner } from '@/components/sections/CTABanner'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Activities | Planet Caretakers',
   description: 'Explore our environmental activities, featured projects, and upcoming cleanup events.',

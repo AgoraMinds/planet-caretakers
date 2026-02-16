@@ -7,6 +7,7 @@ import { RichTextRenderer } from '@/components/rich-text/RichTextRenderer'
 import type { Metadata } from 'next'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Governance & Transparency | Planet Caretakers',
   description: 'Learn about Planet Caretakers governance, policies, and commitment to transparency and accountability.',

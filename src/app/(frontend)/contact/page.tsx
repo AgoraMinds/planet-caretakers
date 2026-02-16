@@ -4,6 +4,7 @@ import { ContactForm } from '@/components/sections/ContactForm'
 import { Container } from '@/components/layout/Container'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Contact | Planet Caretakers',
   description: 'Get in touch with Planet Caretakers. Send us a message or find our contact details.',

@@ -15,6 +15,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Container } from '@/components/layout/Container'
 import type { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 export const metadata: Metadata = {
   title: 'Planet Caretakers - Every Action Counts',
   description: 'Planet Caretakers is a global nonprofit committed to protecting nature through community cleanups, education, and international collaboration.',

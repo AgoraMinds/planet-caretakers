@@ -44,7 +44,7 @@ function AnimatedNumber({ target, suffix }: { target: number; suffix?: string | 
 
   return (
     <span ref={ref}>
-      {count.toLocaleString()}
+      {count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
       {suffix}
     </span>
   )

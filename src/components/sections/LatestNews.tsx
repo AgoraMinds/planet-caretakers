@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { formatDate } from '@/lib/formatDate'
 
 type BlogPost = {
   title: string
@@ -41,11 +42,7 @@ export function LatestNews({ posts, heading = 'Latest News' }: { posts: BlogPost
               )}
               <div className="p-5">
                 <p className="text-xs text-gray-500">
-                  {new Date(post.publishedDate).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
+                  {formatDate(post.publishedDate)}
                   {post.author && ` by ${post.author.name}`}
                 </p>
                 <h3 className="mt-2 text-lg font-bold text-gray-900 group-hover:text-brand-teal transition-colors line-clamp-2">

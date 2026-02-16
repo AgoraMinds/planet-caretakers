@@ -7,6 +7,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RichTextRenderer } from '@/components/rich-text/RichTextRenderer'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { CTABanner } from '@/components/sections/CTABanner'
+import { formatNumber } from '@/lib/formatDate'
 import type { Metadata } from 'next'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -139,11 +140,11 @@ export default async function BranchPage({ params }: Props) {
                 <div className="flex items-baseline gap-2 mb-4">
                   <span className="text-3xl font-bold text-brand-teal">
                     {donationCurrency}
-                    {donationRaised.toLocaleString()}
+                    {formatNumber(donationRaised)}
                   </span>
                   <span className="text-sm text-gray-600">
                     of {donationCurrency}
-                    {donationGoal.toLocaleString()} goal
+                    {formatNumber(donationGoal)} goal
                   </span>
                 </div>
                 <div className="relative h-3 bg-gray-200 rounded-full overflow-hidden">

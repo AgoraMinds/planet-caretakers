@@ -3,6 +3,7 @@ import { HeroSection } from '@/components/sections/HeroSection'
 import { Container } from '@/components/layout/Container'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { RichTextRenderer } from '@/components/rich-text/RichTextRenderer'
+import { formatDate } from '@/lib/formatDate'
 import type { Metadata } from 'next'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
@@ -203,7 +204,7 @@ export default async function PressKitPage() {
                   )}
                   {mention.date && (
                     <p className="mt-2 text-sm text-gray-500">
-                      {new Date(mention.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                      {formatDate(mention.date)}
                     </p>
                   )}
                 </div>

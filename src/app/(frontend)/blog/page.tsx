@@ -2,6 +2,7 @@ import { getPayload } from '@/lib/payload'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/layout/Container'
+import { formatDate } from '@/lib/formatDate'
 import type { Metadata } from 'next'
 
 export const dynamic = 'force-dynamic'
@@ -106,9 +107,7 @@ export default async function BlogPage({
                     )}
                     <div className="p-5">
                       <p className="text-xs text-gray-500">
-                        {new Date(post.publishedDate as string).toLocaleDateString('en-US', {
-                          month: 'long', day: 'numeric', year: 'numeric',
-                        })}
+                        {formatDate(post.publishedDate as string)}
                         {author && ` by ${author.name}`}
                       </p>
                       <h2 className="mt-2 text-lg font-bold text-gray-900 group-hover:text-brand-teal transition-colors line-clamp-2">

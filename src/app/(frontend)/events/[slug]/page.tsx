@@ -6,6 +6,7 @@ import { Container } from '@/components/layout/Container'
 import { RichTextRenderer } from '@/components/rich-text/RichTextRenderer'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
+import { formatDateTimeLong, formatDateLong, formatTime } from '@/lib/formatDate'
 import type { Metadata } from 'next'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -105,10 +106,7 @@ export default async function EventPage({ params }: Props) {
             </h1>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-sm text-gray-300">
               <span>
-                {new Date(event.date as string).toLocaleDateString('en-US', {
-                  weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
-                  hour: '2-digit', minute: '2-digit',
-                })}
+                {formatDateTimeLong(event.date as string)}
               </span>
               {location && (
                 <span>{location.city as string}, {location.country as string}</span>
@@ -151,17 +149,13 @@ export default async function EventPage({ params }: Props) {
                     <div>
                       <dt className="font-medium text-gray-500">Date</dt>
                       <dd className="text-gray-900">
-                        {new Date(event.date as string).toLocaleDateString('en-US', {
-                          weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
-                        })}
+                        {formatDateLong(event.date as string)}
                       </dd>
                     </div>
                     <div>
                       <dt className="font-medium text-gray-500">Time</dt>
                       <dd className="text-gray-900">
-                        {new Date(event.date as string).toLocaleTimeString('en-US', {
-                          hour: '2-digit', minute: '2-digit',
-                        })}
+                        {formatTime(event.date as string)}
                       </dd>
                     </div>
                     {location && (

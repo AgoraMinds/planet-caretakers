@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/layout/Container'
 import { RichTextRenderer } from '@/components/rich-text/RichTextRenderer'
+import { formatDate } from '@/lib/formatDate'
 import type { Metadata } from 'next'
 
 type Props = { params: Promise<{ slug: string }> }
@@ -117,9 +118,7 @@ export default async function BlogPostPage({ params }: Props) {
             </h1>
             <div className="mt-4 flex items-center justify-center gap-4 text-sm text-gray-300">
               <span>
-                {new Date(post.publishedDate as string).toLocaleDateString('en-US', {
-                  month: 'long', day: 'numeric', year: 'numeric',
-                })}
+                {formatDate(post.publishedDate as string)}
               </span>
               {author && <span>by {author.name}</span>}
             </div>

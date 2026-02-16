@@ -1,5 +1,6 @@
 import { Container } from '../layout/Container'
 import { SectionHeading } from '../ui/SectionHeading'
+import { formatNumber } from '@/lib/formatDate'
 
 type FundraisingProject = {
   title: string
@@ -38,8 +39,8 @@ export function FundraisingProgress({
                 <h3 className="font-bold text-gray-900 mb-4">{project.title}</h3>
                 <div className="mb-2">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-2xl font-bold text-brand-teal">{currency}{project.raised.toLocaleString()}</span>
-                    <span className="text-sm text-gray-600">of {currency}{project.goal.toLocaleString()}</span>
+                    <span className="text-2xl font-bold text-brand-teal">{currency}{formatNumber(project.raised)}</span>
+                    <span className="text-sm text-gray-600">of {currency}{formatNumber(project.goal)}</span>
                   </div>
                 </div>
                 <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { formatDateShort } from '@/lib/formatDate'
 
 type Event = {
   title: string
@@ -42,12 +43,7 @@ export function EventsCarousel({ events, heading = 'Upcoming Events' }: { events
                   {event.title}
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  {new Date(event.date).toLocaleDateString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
+                  {formatDateShort(event.date)}
                 </p>
                 {event.location && (
                   <p className="mt-1 text-sm text-gray-500">

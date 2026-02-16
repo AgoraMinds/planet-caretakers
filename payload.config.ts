@@ -81,6 +81,7 @@ export default buildConfig({
   db: process.env.DATABASE_URL
     ? postgresAdapter({
         pool: { connectionString: process.env.DATABASE_URL },
+        push: true,
       })
     : sqliteAdapter({
         client: {

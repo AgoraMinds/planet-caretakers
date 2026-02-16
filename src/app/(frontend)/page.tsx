@@ -15,33 +15,43 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Container } from '@/components/layout/Container'
 
 export default async function HomePage() {
-  const payload = await getPayload()
+  let homePage: any = {}
+  let events: any = { docs: [] }
+  let blogPosts: any = { docs: [] }
+  let partners: any = { docs: [] }
 
-  const [homePage, events, blogPosts, partners] = await Promise.all([
-    payload.findGlobal({ slug: 'home-page' }),
-    payload.find({
-      collection: 'events',
-      where: {
-        _status: { equals: 'published' },
-        date: { greater_than: new Date().toISOString() },
-      },
-      sort: 'date',
-      limit: 6,
-    }),
-    payload.find({
-      collection: 'blog-posts',
-      where: { _status: { equals: 'published' } },
-      sort: '-publishedDate',
-      limit: 3,
-      depth: 2,
-    }),
-    payload.find({
-      collection: 'partners',
-      sort: 'order',
-      limit: 20,
-      depth: 1,
-    }),
-  ])
+  try {
+    const payload = await getPayload()
+
+    ;[homePage, events, blogPosts, partners] = await Promise.all([
+      payload.findGlobal({ slug: 'home-page' }),
+      payload.find({
+        collection: 'events',
+        where: {
+          _status: { equals: 'published' },
+          date: { greater_than: new Date().toISOString() },
+        },
+        sort: 'date',
+        limit: 6,
+      }),
+      payload.find({
+        collection: 'blog-posts',
+        where: { _status: { equals: 'published' } },
+        sort: '-publishedDate',
+        limit: 3,
+        depth: 2,
+      }),
+      payload.find({
+        collection: 'partners',
+        sort: 'order',
+        limit: 20,
+        depth: 1,
+      }),
+    ])
+  } catch (error) {
+    console.error('Failed to fetch data from Payload CMS:', error)
+    // Continue with empty/fallback data
+  }
 
   const hero = homePage.hero as Record<string, unknown> | undefined
   const primaryCta = hero?.primaryCta as { label: string; url: string } | undefined
@@ -53,10 +63,10 @@ export default async function HomePage() {
       {/* Hero */}
       <HeroSection
         tagline={(hero?.tagline as string) || 'Every. Action. Counts.'}
-        subtitle={hero?.subtitle as string}
+        subtitle={hero?.subtitle as string || 'Join us in caring for our planet through community cleanups, education, and environmental conservation worldwide.'}
         backgroundImageUrl={bgImage?.url}
-        primaryCta={primaryCta}
-        secondaryCta={secondaryCta}
+        primaryCta={primaryCta || { label: 'Get Involved', url: '/contact' }}
+        secondaryCta={secondaryCta || { label: 'Learn More', url: '/about' }}
       />
 
       {/* Impact Stats */}
@@ -88,7 +98,7 @@ export default async function HomePage() {
       {/* Upcoming Events */}
       {events.docs.length > 0 && (
         <EventsCarousel
-          events={events.docs.map((e) => ({
+          events={events.docs.map((e: any) => ({
             title: e.title as string,
             slug: e.slug as string,
             date: e.date as string,
@@ -113,7 +123,7 @@ export default async function HomePage() {
       {/* Partner Logos */}
       {partners.docs.length > 0 && (
         <PartnerLogos
-          partners={partners.docs.map((p) => ({
+          partners={partners.docs.map((p: any) => ({
             name: p.name as string,
             url: p.url as string | null,
             logo: p.logo && typeof p.logo === 'object'
@@ -154,7 +164,7 @@ export default async function HomePage() {
       {/* Latest News */}
       {blogPosts.docs.length > 0 && (
         <LatestNews
-          posts={blogPosts.docs.map((p) => ({
+          posts={blogPosts.docs.map((p: any) => ({
             title: p.title as string,
             slug: p.slug as string,
             excerpt: p.excerpt as string,

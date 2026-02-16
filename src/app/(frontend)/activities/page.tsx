@@ -12,29 +12,39 @@ export const metadata: Metadata = {
 }
 
 export default async function ActivitiesPage() {
-  const payload = await getPayload()
+  let activitiesPage: any = {}
+  let projects: any = { docs: [] }
+  let categories: any = { docs: [] }
+  let events: any = { docs: [] }
 
-  const [activitiesPage, projects, categories, events] = await Promise.all([
-    payload.findGlobal({ slug: 'activities-page' }),
-    payload.find({
-      collection: 'projects',
-      where: { isFeatured: { equals: true } },
-      sort: 'order',
-      limit: 4,
-      depth: 1,
-    }),
-    payload.find({ collection: 'activity-categories', sort: 'order', limit: 10, depth: 1 }),
-    payload.find({
-      collection: 'events',
-      where: {
-        _status: { equals: 'published' },
-        date: { greater_than: new Date().toISOString() },
-      },
-      sort: 'date',
-      limit: 6,
-      depth: 1,
-    }),
-  ])
+  try {
+    const payload = await getPayload()
+
+    ;[activitiesPage, projects, categories, events] = await Promise.all([
+      payload.findGlobal({ slug: 'activities-page' }),
+      payload.find({
+        collection: 'projects',
+        where: { isFeatured: { equals: true } },
+        sort: 'order',
+        limit: 4,
+        depth: 1,
+      }),
+      payload.find({ collection: 'activity-categories', sort: 'order', limit: 10, depth: 1 }),
+      payload.find({
+        collection: 'events',
+        where: {
+          _status: { equals: 'published' },
+          date: { greater_than: new Date().toISOString() },
+        },
+        sort: 'date',
+        limit: 6,
+        depth: 1,
+      }),
+    ])
+  } catch (error) {
+    console.error('Failed to fetch data from Payload CMS:', error)
+    // Continue with empty/fallback data
+  }
 
   const hero = activitiesPage.hero as Record<string, unknown> | undefined
   const bgImage = hero?.backgroundImage as { url: string } | undefined
@@ -43,13 +53,13 @@ export default async function ActivitiesPage() {
     <>
       <HeroSection
         tagline={(hero?.heading as string) || 'Our Activities'}
-        subtitle={hero?.subtitle as string}
+        subtitle={hero?.subtitle as string || 'From beach cleanups to educational programs, discover the many ways we care for our planet.'}
         backgroundImageUrl={bgImage?.url}
       />
 
       {projects.docs.length > 0 && (
         <ProjectShowcase
-          projects={projects.docs.map((p) => ({
+          projects={projects.docs.map((p: any) => ({
             title: p.title as string,
             slug: p.slug as string,
             subtitle: p.subtitle as string | null,
@@ -58,13 +68,13 @@ export default async function ActivitiesPage() {
               : null,
             stats: (p.stats as { label: string; value: string }[]) || [],
           }))}
-          heading={(activitiesPage.featuredProjectsSection as Record<string, string>)?.heading}
+          heading={(activitiesPage.featuredProjectsSection as Record<string, string>)?.heading || 'Featured Projects'}
         />
       )}
 
       {categories.docs.length > 0 && (
         <ActivityCategoryGrid
-          categories={categories.docs.map((c) => ({
+          categories={categories.docs.map((c: any) => ({
             title: c.title as string,
             description: c.description as string,
             icon: c.icon && typeof c.icon === 'object'
@@ -74,13 +84,13 @@ export default async function ActivitiesPage() {
               ? { url: (c.image as Record<string, string>).url, alt: (c.image as Record<string, string>).alt }
               : null,
           }))}
-          heading={(activitiesPage.categoriesSection as Record<string, string>)?.heading}
+          heading={(activitiesPage.categoriesSection as Record<string, string>)?.heading || 'What We Do'}
         />
       )}
 
       {events.docs.length > 0 && (
         <EventsCarousel
-          events={events.docs.map((e) => ({
+          events={events.docs.map((e: any) => ({
             title: e.title as string,
             slug: e.slug as string,
             date: e.date as string,
@@ -90,7 +100,7 @@ export default async function ActivitiesPage() {
               : null,
             location: e.location as { name: string; city: string; country: string } | null,
           }))}
-          heading={(activitiesPage.eventsSection as Record<string, string>)?.heading}
+          heading={(activitiesPage.eventsSection as Record<string, string>)?.heading || 'Upcoming Events'}
         />
       )}
 

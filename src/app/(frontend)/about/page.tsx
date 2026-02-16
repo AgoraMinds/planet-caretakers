@@ -13,13 +13,22 @@ export const metadata: Metadata = {
 }
 
 export default async function AboutPage() {
-  const payload = await getPayload()
+  let aboutPage: any = {}
+  let teamMembers: any = { docs: [] }
+  let partners: any = { docs: [] }
 
-  const [aboutPage, teamMembers, partners] = await Promise.all([
-    payload.findGlobal({ slug: 'about-page' }),
-    payload.find({ collection: 'team-members', sort: 'order', limit: 20, depth: 1 }),
-    payload.find({ collection: 'partners', sort: 'order', limit: 20, depth: 1 }),
-  ])
+  try {
+    const payload = await getPayload()
+
+    ;[aboutPage, teamMembers, partners] = await Promise.all([
+      payload.findGlobal({ slug: 'about-page' }),
+      payload.find({ collection: 'team-members', sort: 'order', limit: 20, depth: 1 }),
+      payload.find({ collection: 'partners', sort: 'order', limit: 20, depth: 1 }),
+    ])
+  } catch (error) {
+    console.error('Failed to fetch data from Payload CMS:', error)
+    // Continue with empty/fallback data
+  }
 
   const hero = aboutPage.hero as Record<string, unknown> | undefined
   const bgImage = hero?.backgroundImage as { url: string } | undefined
@@ -30,49 +39,48 @@ export default async function AboutPage() {
     <>
       <HeroSection
         tagline={(hero?.heading as string) || 'About Us'}
-        subtitle={hero?.subtitle as string}
+        subtitle={hero?.subtitle as string || 'A global nonprofit born in Portugal, dedicated to community cleanups, education, and environmental conservation worldwide.'}
         backgroundImageUrl={bgImage?.url}
       />
 
       {/* Our Story */}
-      {founderStory && (
-        <section className="py-20">
-          <Container>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <SectionHeading
-                  title={(founderStory.heading as string) || 'Our Story'}
-                  align="left"
-                />
-                <div className="prose prose-lg text-gray-600 max-w-none">
-                  <p>Planet Caretakers was born from a deep love of nature and community. Founded by {(founderStory.founderName as string) || 'Débora Sá'}, our journey started with small beach cleanups in Portugal and has grown into a global movement.</p>
-                </div>
+      <section className="py-20">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <SectionHeading
+                title={(founderStory?.heading as string) || 'Our Story'}
+                align="left"
+              />
+              <div className="prose prose-lg text-gray-600 max-w-none">
+                <p>Planet Caretakers was born from a deep love of nature and community. Founded by {(founderStory?.founderName as string) || 'Débora Sá'}, our journey started with small beach cleanups in Portugal and has grown into a global movement.</p>
+                <p className="mt-4">Today, we work with communities worldwide to protect and restore our planet through hands-on environmental action, education, and sustainable partnerships.</p>
               </div>
-              {(founderStory.founderImage as Record<string, string> | null) && (
-                <div className="relative h-96 rounded-2xl overflow-hidden">
-                  <img
-                    src={(founderStory.founderImage as Record<string, string>).url}
-                    alt={(founderStory.founderName as string) || 'Founder'}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
             </div>
-          </Container>
-        </section>
-      )}
+            {founderStory && (founderStory.founderImage as Record<string, string> | null) && (
+              <div className="relative h-96 rounded-2xl overflow-hidden">
+                <img
+                  src={(founderStory.founderImage as Record<string, string>).url}
+                  alt={(founderStory.founderName as string) || 'Founder'}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+          </div>
+        </Container>
+      </section>
 
       {/* Vision */}
-      {vision && (
-        <section className="py-20 bg-brand-teal">
-          <Container>
-            <div className="text-center max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-white">{(vision.heading as string) || 'Our Vision'}</h2>
-              <p className="mt-6 text-lg text-gray-200 leading-relaxed">{vision.content as string}</p>
-            </div>
-          </Container>
-        </section>
-      )}
+      <section className="py-20 bg-brand-teal">
+        <Container>
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold text-white">{(vision?.heading as string) || 'Our Vision'}</h2>
+            <p className="mt-6 text-lg text-gray-200 leading-relaxed">
+              {(vision?.content as string) || 'A world where every person is empowered to care for the planet, where communities thrive in harmony with nature, and where environmental action is a shared responsibility across all borders.'}
+            </p>
+          </div>
+        </Container>
+      </section>
 
       {/* Priorities */}
       {aboutPage.priorityAreas && (aboutPage.priorityAreas as unknown[]).length > 0 && (
@@ -84,7 +92,7 @@ export default async function AboutPage() {
       {/* Partner Logos */}
       {partners.docs.length > 0 && (
         <PartnerLogos
-          partners={partners.docs.map((p) => ({
+          partners={partners.docs.map((p: any) => ({
             name: p.name as string,
             url: p.url as string | null,
             logo: p.logo && typeof p.logo === 'object'
@@ -98,7 +106,7 @@ export default async function AboutPage() {
       {/* Team */}
       {teamMembers.docs.length > 0 && (
         <TeamGrid
-          members={teamMembers.docs.map((m) => ({
+          members={teamMembers.docs.map((m: any) => ({
             name: m.name as string,
             role: m.role as string,
             bio: m.bio as string | null,

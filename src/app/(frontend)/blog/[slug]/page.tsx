@@ -10,43 +10,85 @@ type Props = { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const payload = await getPayload()
-  const posts = await payload.find({
-    collection: 'blog-posts',
-    where: { slug: { equals: slug }, _status: { equals: 'published' } },
-    limit: 1,
-    depth: 1,
-  })
-  const post = posts.docs[0]
-  if (!post) return { title: 'Post Not Found' }
+  
+  try {
+    const payload = await getPayload()
+    const posts = await payload.find({
+      collection: 'blog-posts',
+      where: { slug: { equals: slug }, _status: { equals: 'published' } },
+      limit: 1,
+      depth: 1,
+    })
+    const post = posts.docs[0]
+    if (!post) return { title: 'Post Not Found' }
 
-  const image = post.featuredImage && typeof post.featuredImage === 'object'
-    ? (post.featuredImage as Record<string, string>)
-    : null
+    const image = post.featuredImage && typeof post.featuredImage === 'object'
+      ? (post.featuredImage as Record<string, string>)
+      : null
 
-  return {
-    title: `${post.title} | Planet Caretakers`,
-    description: post.excerpt as string,
-    openGraph: {
-      title: post.title as string,
+    return {
+      title: `${post.title} | Planet Caretakers`,
       description: post.excerpt as string,
-      images: image ? [{ url: image.url }] : [],
-    },
+      openGraph: {
+        title: post.title as string,
+        description: post.excerpt as string,
+        images: image ? [{ url: image.url }] : [],
+      },
+    }
+  } catch (error) {
+    console.error('Failed to fetch metadata from Payload CMS:', error)
+    return { title: 'Blog Post | Planet Caretakers' }
   }
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const payload = await getPayload()
-  const posts = await payload.find({
-    collection: 'blog-posts',
-    where: { slug: { equals: slug }, _status: { equals: 'published' } },
-    limit: 1,
-    depth: 2,
-  })
+  
+  let post: any = null
 
-  const post = posts.docs[0]
-  if (!post) notFound()
+  try {
+    const payload = await getPayload()
+    const posts = await payload.find({
+      collection: 'blog-posts',
+      where: { slug: { equals: slug }, _status: { equals: 'published' } },
+      limit: 1,
+      depth: 2,
+    })
+    post = posts.docs[0]
+  } catch (error) {
+    console.error('Failed to fetch data from Payload CMS:', error)
+  }
+
+  if (!post) {
+    return (
+      <article>
+        <section className="bg-brand-teal-dark py-16">
+          <Container>
+            <div className="max-w-3xl mx-auto text-center">
+              <h1 className="text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
+                Content Coming Soon
+              </h1>
+              <p className="mt-4 text-gray-300">
+                This blog post is not yet available. Check back soon!
+              </p>
+            </div>
+          </Container>
+        </section>
+        <section className="py-20">
+          <Container>
+            <div className="max-w-3xl mx-auto">
+              <Link
+                href="/blog"
+                className="inline-flex items-center text-sm font-semibold text-brand-green hover:text-brand-green-light transition-colors"
+              >
+                &larr; Back to Blog
+              </Link>
+            </div>
+          </Container>
+        </section>
+      </article>
+    )
+  }
 
   const image = post.featuredImage && typeof post.featuredImage === 'object'
     ? (post.featuredImage as Record<string, string>)

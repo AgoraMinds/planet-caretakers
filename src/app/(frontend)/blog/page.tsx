@@ -18,18 +18,25 @@ export default async function BlogPage({
   const currentPage = Number(params.page) || 1
   const category = params.category
 
-  const payload = await getPayload()
-  const posts = await payload.find({
-    collection: 'blog-posts',
-    where: {
-      _status: { equals: 'published' },
-      ...(category ? { categories: { contains: category } } : {}),
-    },
-    sort: '-publishedDate',
-    page: currentPage,
-    limit: 9,
-    depth: 2,
-  })
+  let posts: any = { docs: [], totalPages: 1 }
+
+  try {
+    const payload = await getPayload()
+    posts = await payload.find({
+      collection: 'blog-posts',
+      where: {
+        _status: { equals: 'published' },
+        ...(category ? { categories: { contains: category } } : {}),
+      },
+      sort: '-publishedDate',
+      page: currentPage,
+      limit: 9,
+      depth: 2,
+    })
+  } catch (error) {
+    console.error('Failed to fetch data from Payload CMS:', error)
+    // Continue with empty/fallback data
+  }
 
   const categories = ['news', 'events', 'impact-stories', 'tips', 'partnerships']
 
@@ -72,7 +79,7 @@ export default async function BlogPage({
           {/* Posts Grid */}
           {posts.docs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.docs.map((post) => {
+              {posts.docs.map((post: any) => {
                 const image = post.featuredImage && typeof post.featuredImage === 'object'
                   ? post.featuredImage as Record<string, string>
                   : null
@@ -115,7 +122,10 @@ export default async function BlogPage({
               })}
             </div>
           ) : (
-            <p className="text-center text-gray-500 py-12">No posts found.</p>
+            <div className="text-center py-12">
+              <p className="text-gray-500 mb-4">No posts available yet.</p>
+              <p className="text-sm text-gray-400">Check back soon for updates and stories from Planet Caretakers!</p>
+            </div>
           )}
 
           {/* Pagination */}

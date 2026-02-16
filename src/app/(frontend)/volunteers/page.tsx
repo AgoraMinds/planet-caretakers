@@ -11,12 +11,20 @@ export const metadata: Metadata = {
 }
 
 export default async function VolunteersPage() {
-  const payload = await getPayload()
+  let volunteersPage: any = {}
+  let leaders: any = { docs: [] }
 
-  const [volunteersPage, leaders] = await Promise.all([
-    payload.findGlobal({ slug: 'volunteers-page' }),
-    payload.find({ collection: 'volunteer-leaders', sort: 'order', limit: 50, depth: 1 }),
-  ])
+  try {
+    const payload = await getPayload()
+
+    ;[volunteersPage, leaders] = await Promise.all([
+      payload.findGlobal({ slug: 'volunteers-page' }),
+      payload.find({ collection: 'volunteer-leaders', sort: 'order', limit: 50, depth: 1 }),
+    ])
+  } catch (error) {
+    console.error('Failed to fetch data from Payload CMS:', error)
+    // Continue with empty/fallback data
+  }
 
   const hero = volunteersPage.hero as Record<string, unknown> | undefined
   const bgImage = hero?.backgroundImage as { url: string } | undefined
@@ -24,8 +32,8 @@ export default async function VolunteersPage() {
   const ctaButton = cta?.button as { label: string; url: string } | undefined
 
   const portugalLeaders = leaders.docs
-    .filter((l) => l.region === 'portugal')
-    .map((l) => ({
+    .filter((l: any) => l.region === 'portugal')
+    .map((l: any) => ({
       name: l.name as string,
       location: l.location as string,
       country: l.country as string,
@@ -37,8 +45,8 @@ export default async function VolunteersPage() {
     }))
 
   const worldwideLeaders = leaders.docs
-    .filter((l) => l.region === 'worldwide')
-    .map((l) => ({
+    .filter((l: any) => l.region === 'worldwide')
+    .map((l: any) => ({
       name: l.name as string,
       location: l.location as string,
       country: l.country as string,
@@ -53,30 +61,40 @@ export default async function VolunteersPage() {
     <>
       <HeroSection
         tagline={(hero?.heading as string) || 'Our Volunteers'}
-        subtitle={hero?.subtitle as string}
+        subtitle={hero?.subtitle as string || 'Meet the passionate leaders bringing Planet Caretakers to communities worldwide.'}
         backgroundImageUrl={bgImage?.url}
       />
 
       <section className="py-20">
         <Container>
-          {portugalLeaders.length > 0 && (
+          {portugalLeaders.length > 0 ? (
             <VolunteerGrid
               title={(volunteersPage.portugalSection as Record<string, string>)?.heading || 'Portugal Team Leaders'}
               volunteers={portugalLeaders}
             />
+          ) : (
+            <div className="text-center py-12">
+              <h2 className="text-2xl font-bold text-brand-teal-dark mb-4">Portugal Team Leaders</h2>
+              <p className="text-gray-600">Content coming soon...</p>
+            </div>
           )}
-          {worldwideLeaders.length > 0 && (
+          {worldwideLeaders.length > 0 ? (
             <VolunteerGrid
               title={(volunteersPage.worldwideSection as Record<string, string>)?.heading || 'Worldwide Leaders'}
               volunteers={worldwideLeaders}
             />
+          ) : (
+            <div className="text-center py-12 mt-12">
+              <h2 className="text-2xl font-bold text-brand-teal-dark mb-4">Worldwide Leaders</h2>
+              <p className="text-gray-600">Content coming soon...</p>
+            </div>
           )}
         </Container>
       </section>
 
       <CTABanner
         heading={(cta?.heading as string) || 'Want to get involved?'}
-        description={cta?.description as string}
+        description={(cta?.description as string) || 'Join our global community of volunteers making a real difference.'}
         buttonLabel={ctaButton?.label || 'Become a Volunteer'}
         buttonUrl={ctaButton?.url || '/contact'}
       />

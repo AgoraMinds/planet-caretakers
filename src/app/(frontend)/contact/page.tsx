@@ -10,8 +10,15 @@ export const metadata: Metadata = {
 }
 
 export default async function ContactPage() {
-  const payload = await getPayload()
-  const contactPage = await payload.findGlobal({ slug: 'contact-page' })
+  let contactPage: any = {}
+
+  try {
+    const payload = await getPayload()
+    contactPage = await payload.findGlobal({ slug: 'contact-page' })
+  } catch (error) {
+    console.error('Failed to fetch data from Payload CMS:', error)
+    // Continue with empty/fallback data
+  }
 
   const hero = contactPage.hero as Record<string, unknown> | undefined
   const contactInfo = contactPage.contactInfo as Record<string, string> | undefined
@@ -20,7 +27,7 @@ export default async function ContactPage() {
     <>
       <HeroSection
         tagline={(hero?.heading as string) || 'Contact Us'}
-        subtitle={hero?.subtitle as string}
+        subtitle={hero?.subtitle as string || 'Get in touch with our team. We\'d love to hear from you!'}
       />
 
       <section className="py-20">
@@ -39,10 +46,10 @@ export default async function ContactPage() {
               <div>
                 <h3 className="text-lg font-bold text-brand-teal-dark mb-3">Email</h3>
                 <a
-                  href={`mailto:${contactInfo?.email || 'contact@planetcaretakers.org'}`}
+                  href={`mailto:${contactInfo?.email || 'info@planetcaretakers.org'}`}
                   className="text-brand-green hover:text-brand-green-light transition-colors"
                 >
-                  {contactInfo?.email || 'contact@planetcaretakers.org'}
+                  {contactInfo?.email || 'info@planetcaretakers.org'}
                 </a>
               </div>
 

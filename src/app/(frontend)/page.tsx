@@ -1,0 +1,156 @@
+import { getPayload } from '@/lib/payload'
+import { HeroSection } from '@/components/sections/HeroSection'
+import { ImpactStats } from '@/components/sections/ImpactStats'
+import { PriorityCards } from '@/components/sections/PriorityCards'
+import { EventsCarousel } from '@/components/sections/EventsCarousel'
+import { PartnershipBenefits } from '@/components/sections/PartnershipBenefits'
+import { PartnerLogos } from '@/components/sections/PartnerLogos'
+import { LatestNews } from '@/components/sections/LatestNews'
+import { ContactForm } from '@/components/sections/ContactForm'
+import { SectionHeading } from '@/components/ui/SectionHeading'
+import { Container } from '@/components/layout/Container'
+
+export default async function HomePage() {
+  const payload = await getPayload()
+
+  const [homePage, events, blogPosts, partners] = await Promise.all([
+    payload.findGlobal({ slug: 'home-page' }),
+    payload.find({
+      collection: 'events',
+      where: {
+        _status: { equals: 'published' },
+        date: { greater_than: new Date().toISOString() },
+      },
+      sort: 'date',
+      limit: 6,
+    }),
+    payload.find({
+      collection: 'blog-posts',
+      where: { _status: { equals: 'published' } },
+      sort: '-publishedDate',
+      limit: 3,
+      depth: 2,
+    }),
+    payload.find({
+      collection: 'partners',
+      sort: 'order',
+      limit: 20,
+      depth: 1,
+    }),
+  ])
+
+  const hero = homePage.hero as Record<string, unknown> | undefined
+  const primaryCta = hero?.primaryCta as { label: string; url: string } | undefined
+  const secondaryCta = hero?.secondaryCta as { label: string; url: string } | undefined
+  const bgImage = hero?.backgroundImage as { url: string } | undefined
+
+  return (
+    <>
+      {/* Hero */}
+      <HeroSection
+        tagline={(hero?.tagline as string) || 'Every. Action. Counts.'}
+        subtitle={hero?.subtitle as string}
+        backgroundImageUrl={bgImage?.url}
+        primaryCta={primaryCta}
+        secondaryCta={secondaryCta}
+      />
+
+      {/* Impact Stats */}
+      {homePage.impactStats && (homePage.impactStats as unknown[]).length > 0 && (
+        <ImpactStats
+          stats={(homePage.impactStats as { value: string; label: string; suffix?: string }[])}
+        />
+      )}
+
+      {/* What We Do */}
+      {homePage.whatWeDo && (
+        <section className="py-20">
+          <Container>
+            <SectionHeading
+              title={(homePage.whatWeDo as Record<string, string>).heading || 'What We Do'}
+              subtitle={(homePage.whatWeDo as Record<string, string>).description}
+            />
+          </Container>
+        </section>
+      )}
+
+      {/* Priorities */}
+      {homePage.priorities && (homePage.priorities as unknown[]).length > 0 && (
+        <PriorityCards
+          priorities={(homePage.priorities as { title: string; description: string; icon?: { url: string; alt: string } }[])}
+        />
+      )}
+
+      {/* Upcoming Events */}
+      {events.docs.length > 0 && (
+        <EventsCarousel
+          events={events.docs.map((e) => ({
+            title: e.title as string,
+            slug: e.slug as string,
+            date: e.date as string,
+            type: e.type as string,
+            featuredImage: e.featuredImage && typeof e.featuredImage === 'object'
+              ? { url: (e.featuredImage as Record<string, string>).url, alt: (e.featuredImage as Record<string, string>).alt }
+              : null,
+            location: e.location as { name: string; city: string; country: string } | null,
+          }))}
+          heading={(homePage.eventsSection as Record<string, string>)?.heading || 'Upcoming Events'}
+        />
+      )}
+
+      {/* Partnership Benefits */}
+      {homePage.partnershipSection && (
+        <PartnershipBenefits
+          benefits={(homePage.partnershipSection as Record<string, unknown>).benefits as { title: string; description: string; icon?: { url: string; alt: string } }[] || []}
+          heading={(homePage.partnershipSection as Record<string, string>).heading}
+        />
+      )}
+
+      {/* Partner Logos */}
+      {partners.docs.length > 0 && (
+        <PartnerLogos
+          partners={partners.docs.map((p) => ({
+            name: p.name as string,
+            url: p.url as string | null,
+            logo: p.logo && typeof p.logo === 'object'
+              ? { url: (p.logo as Record<string, string>).url, alt: (p.logo as Record<string, string>).alt }
+              : null,
+          }))}
+          heading="Our Partners"
+        />
+      )}
+
+      {/* Latest News */}
+      {blogPosts.docs.length > 0 && (
+        <LatestNews
+          posts={blogPosts.docs.map((p) => ({
+            title: p.title as string,
+            slug: p.slug as string,
+            excerpt: p.excerpt as string,
+            publishedDate: p.publishedDate as string,
+            featuredImage: p.featuredImage && typeof p.featuredImage === 'object'
+              ? { url: (p.featuredImage as Record<string, string>).url, alt: (p.featuredImage as Record<string, string>).alt }
+              : null,
+            author: p.author && typeof p.author === 'object'
+              ? { name: (p.author as Record<string, string>).name }
+              : null,
+          }))}
+          heading={(homePage.newsSection as Record<string, string>)?.heading || 'Latest News'}
+        />
+      )}
+
+      {/* Contact Form */}
+      {(homePage.contactCta as Record<string, unknown>)?.showForm !== false && (
+        <section className="py-20 bg-brand-sand-light">
+          <Container>
+            <div className="mx-auto max-w-2xl">
+              <ContactForm
+                heading={(homePage.contactCta as Record<string, string>)?.heading || 'Get In Touch'}
+              />
+            </div>
+          </Container>
+        </section>
+      )}
+    </>
+  )
+}

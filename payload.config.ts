@@ -102,8 +102,14 @@ export default buildConfig({
     ...(process.env.BLOB_READ_WRITE_TOKEN
       ? [
           vercelBlobStorage({
-            collections: { media: true },
-            token: process.env.BLOB_READ_WRITE_TOKEN,
+            enabled: true,
+            collections: {
+              media: {
+                prefix: 'media',
+              },
+            },
+            token: process.env.BLOB_READ_WRITE_TOKEN!,
+            cacheControlMaxAge: 365 * 24 * 60 * 60,
           }),
         ]
       : []),

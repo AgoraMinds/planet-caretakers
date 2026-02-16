@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 type Priority = {
   title: string
   description: string
@@ -15,9 +17,11 @@ export function PriorityCards({ priorities }: { priorities: Priority[] }) {
               className="rounded-2xl bg-white p-6 shadow-sm hover:shadow-md transition-shadow"
             >
               {priority.icon && (
-                <img
+                <Image
                   src={priority.icon.url}
-                  alt={priority.icon.alt}
+                  alt={priority.icon.alt || ''}
+                  width={48}
+                  height={48}
                   className="h-12 w-12 mb-4"
                 />
               )}

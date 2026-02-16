@@ -61,13 +61,20 @@ export function MobileMenu() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-6 px-4">
+              <div className="mt-6 px-4 space-y-3">
                 <Link
                   href="/contact"
                   onClick={() => setIsOpen(false)}
                   className="block w-full rounded-full bg-brand-green px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-brand-green-light transition-colors"
                 >
                   Get Involved
+                </Link>
+                <Link
+                  href="/donate"
+                  onClick={() => setIsOpen(false)}
+                  className="block w-full rounded-full bg-brand-teal px-6 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-brand-teal-dark transition-colors"
+                >
+                  Donate
                 </Link>
               </div>
             </nav>

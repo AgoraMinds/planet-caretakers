@@ -33,13 +33,19 @@ export function Header() {
             ))}
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
+          {/* CTA Buttons */}
+          <div className="hidden md:flex items-center gap-3">
             <Link
               href="/contact"
               className="inline-flex items-center rounded-full bg-brand-green px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-green-light transition-colors"
             >
               Get Involved
+            </Link>
+            <Link
+              href="/donate"
+              className="inline-flex items-center rounded-full bg-brand-teal px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-teal-dark transition-colors"
+            >
+              Donate
             </Link>
           </div>
 

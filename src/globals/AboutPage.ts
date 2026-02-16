@@ -58,5 +58,29 @@ export const AboutPage: GlobalConfig = {
         { name: 'description', type: 'textarea' },
       ],
     },
+    {
+      name: 'impactTimeline',
+      type: 'group',
+      label: 'Impact Timeline',
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: true },
+        { name: 'heading', type: 'text', defaultValue: 'Our Journey' },
+        {
+          name: 'milestones',
+          type: 'array',
+          maxRows: 20,
+          fields: [
+            { name: 'year', type: 'text', required: true },
+            { name: 'title', type: 'text', required: true },
+            { name: 'description', type: 'textarea', required: true },
+            {
+              name: 'stat',
+              type: 'text',
+              admin: { description: 'Optional key metric, e.g. "44 tons removed"' },
+            },
+          ],
+        },
+      ],
+    },
   ],
 }

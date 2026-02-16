@@ -59,6 +59,56 @@ export const PartnersPage: GlobalConfig = {
       ],
     },
     {
+      name: 'packages',
+      type: 'array',
+      label: 'Partnership Packages',
+      maxRows: 4,
+      fields: [
+        { name: 'name', type: 'text', required: true },
+        { name: 'tagline', type: 'text' },
+        { name: 'features', type: 'array', fields: [{ name: 'feature', type: 'text', required: true }] },
+        { name: 'ctaLabel', type: 'text', defaultValue: 'Get Started' },
+        { name: 'ctaUrl', type: 'text', defaultValue: '/contact' },
+        { name: 'highlighted', type: 'checkbox', defaultValue: false, admin: { description: 'Highlight this package as recommended' } },
+      ],
+    },
+    {
+      name: 'caseStudies',
+      type: 'array',
+      label: 'Case Studies',
+      maxRows: 6,
+      fields: [
+        { name: 'title', type: 'text', required: true },
+        { name: 'partnerName', type: 'text', required: true },
+        { name: 'challenge', type: 'textarea', required: true },
+        { name: 'solution', type: 'textarea', required: true },
+        { name: 'outcomes', type: 'textarea', required: true },
+        { name: 'logo', type: 'upload', relationTo: 'media' },
+        { name: 'image', type: 'upload', relationTo: 'media' },
+      ],
+    },
+    {
+      name: 'faq',
+      type: 'array',
+      label: 'Frequently Asked Questions',
+      maxRows: 10,
+      fields: [
+        { name: 'question', type: 'text', required: true },
+        { name: 'answer', type: 'textarea', required: true },
+      ],
+    },
+    {
+      name: 'bookCall',
+      type: 'group',
+      label: 'Book a Call',
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: true },
+        { name: 'heading', type: 'text', defaultValue: 'Ready to partner with us?' },
+        { name: 'description', type: 'textarea', defaultValue: 'Schedule a call to discuss how we can work together.' },
+        { name: 'calendlyUrl', type: 'text', admin: { description: 'Calendly or booking link URL' } },
+      ],
+    },
+    {
       name: 'cta',
       type: 'group',
       fields: [

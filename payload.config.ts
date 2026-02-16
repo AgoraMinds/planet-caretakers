@@ -19,6 +19,7 @@ import { Partners } from '@/collections/Partners'
 import { ActivityCategories } from '@/collections/ActivityCategories'
 import { Projects } from '@/collections/Projects'
 import { ContactSubmissions } from '@/collections/ContactSubmissions'
+import { Branches } from '@/collections/Branches'
 
 // Globals
 import { SiteSettings } from '@/globals/SiteSettings'
@@ -29,6 +30,9 @@ import { ActivitiesPage } from '@/globals/ActivitiesPage'
 import { VolunteersPage } from '@/globals/VolunteersPage'
 import { PartnersPage } from '@/globals/PartnersPage'
 import { ContactPage } from '@/globals/ContactPage'
+import { DonatePage } from '@/globals/DonatePage'
+import { PressKitPage } from '@/globals/PressKitPage'
+import { GovernancePage } from '@/globals/GovernancePage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -54,6 +58,7 @@ export default buildConfig({
     ActivityCategories,
     Projects,
     ContactSubmissions,
+    Branches,
   ],
   globals: [
     SiteSettings,
@@ -64,6 +69,9 @@ export default buildConfig({
     VolunteersPage,
     PartnersPage,
     ContactPage,
+    DonatePage,
+    PressKitPage,
+    GovernancePage,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'default-secret-change-me-in-production',
@@ -83,7 +91,7 @@ export default buildConfig({
   plugins: [
     seoPlugin({
       collections: ['blog-posts', 'events'],
-      globals: ['home-page', 'about-page', 'activities-page', 'volunteers-page', 'partners-page', 'contact-page'],
+      globals: ['home-page', 'about-page', 'activities-page', 'volunteers-page', 'partners-page', 'contact-page', 'donate-page', 'press-kit-page', 'governance-page'],
       tabbedUI: true,
       generateTitle: ({ doc }) => `${(doc as Record<string, unknown>)?.title || 'Planet Caretakers'} | Planet Caretakers`,
       generateDescription: ({ doc }) => {

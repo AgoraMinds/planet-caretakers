@@ -4,12 +4,16 @@ const quickLinks = [
   { label: 'Home', href: '/' },
   { label: 'About Us', href: '/about' },
   { label: 'Activities', href: '/activities' },
+  { label: 'Projects', href: '/projects' },
   { label: 'Blog', href: '/blog' },
+  { label: 'Press Kit', href: '/press-kit' },
 ]
 
 const getInvolvedLinks = [
   { label: 'Become a Volunteer', href: '/contact' },
   { label: 'Corporate Partners', href: '/partners' },
+  { label: 'Donate', href: '/donate' },
+  { label: 'Governance', href: '/governance' },
   { label: 'Upcoming Events', href: '/activities' },
   { label: 'Contact Us', href: '/contact' },
 ]
@@ -84,14 +88,20 @@ export function Footer() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/contact"
+                href="/donate"
                 className="inline-flex items-center justify-center rounded-full bg-brand-green px-8 py-3 text-base font-semibold text-white shadow-sm hover:bg-brand-green-light transition-colors"
+              >
+                Donate Now
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-base font-semibold text-brand-teal shadow-sm hover:bg-gray-100 transition-colors"
               >
                 Become a Volunteer
               </Link>
               <Link
                 href="/partners"
-                className="inline-flex items-center justify-center rounded-full bg-white px-8 py-3 text-base font-semibold text-brand-teal shadow-sm hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center justify-center rounded-full border border-white/30 px-8 py-3 text-base font-semibold text-white shadow-sm hover:bg-white/10 transition-colors"
               >
                 Become a Partner
               </Link>

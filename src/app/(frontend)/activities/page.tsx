@@ -46,6 +46,21 @@ export default async function ActivitiesPage() {
     // Continue with empty/fallback data
   }
 
+  const fallbackProjects = [
+    { title: 'Underwater Caretakers', slug: 'underwater-caretakers', subtitle: 'Working as one to save our oceans', featuredImage: null, stats: [{ label: 'Editions', value: '2' }, { label: 'Divers', value: '50+' }] },
+    { title: 'Simultaneous Cleanups', slug: 'simultaneous-cleanups', subtitle: 'Overcoming geographical barriers for a common cause', featuredImage: null, stats: [{ label: 'Countries', value: '8' }, { label: 'Cleanups', value: '300+' }] },
+    { title: 'Water Bottles Concept', slug: 'water-bottles-concept', subtitle: 'Turning the tide on single-use plastic water bottles', featuredImage: null, stats: [] },
+  ]
+
+  const fallbackCategories = [
+    { title: 'Beach Cleanups', description: 'Preserving our beaches, protecting marine life.', icon: null, image: null },
+    { title: 'Forest Cleanups', description: 'Defend the woods: clearing paths, protecting wildlife.', icon: null, image: null },
+    { title: 'Urban Cleanups', description: 'Clearing the streets, one cigarette at a time.', icon: null, image: null },
+    { title: 'Reforestation', description: 'Planting the future: growing forests, restoring life.', icon: null, image: null },
+    { title: 'Illegal Dumping', description: 'Take back our land: cleaning up, one illegal dump at a time.', icon: null, image: null },
+    { title: 'Removal of Invasive Plants', description: "Rescuing nature's balance for a healthier ecosystem.", icon: null, image: null },
+  ]
+
   const hero = activitiesPage.hero as Record<string, unknown> | undefined
   const bgImage = hero?.backgroundImage as { url: string } | undefined
 
@@ -57,36 +72,38 @@ export default async function ActivitiesPage() {
         backgroundImageUrl={bgImage?.url}
       />
 
-      {projects.docs.length > 0 && (
-        <ProjectShowcase
-          projects={projects.docs.map((p: any) => ({
-            title: p.title as string,
-            slug: p.slug as string,
-            subtitle: p.subtitle as string | null,
-            featuredImage: p.featuredImage && typeof p.featuredImage === 'object'
-              ? { url: (p.featuredImage as Record<string, string>).url, alt: (p.featuredImage as Record<string, string>).alt }
-              : null,
-            stats: (p.stats as { label: string; value: string }[]) || [],
-          }))}
-          heading={(activitiesPage.featuredProjectsSection as Record<string, string>)?.heading || 'Featured Projects'}
-        />
-      )}
+      <ProjectShowcase
+        projects={projects.docs.length > 0
+          ? projects.docs.map((p: any) => ({
+              title: p.title as string,
+              slug: p.slug as string,
+              subtitle: p.subtitle as string | null,
+              featuredImage: p.featuredImage && typeof p.featuredImage === 'object'
+                ? { url: (p.featuredImage as Record<string, string>).url, alt: (p.featuredImage as Record<string, string>).alt }
+                : null,
+              stats: (p.stats as { label: string; value: string }[]) || [],
+            }))
+          : fallbackProjects
+        }
+        heading={(activitiesPage.featuredProjectsSection as Record<string, string>)?.heading || 'Featured Projects'}
+      />
 
-      {categories.docs.length > 0 && (
-        <ActivityCategoryGrid
-          categories={categories.docs.map((c: any) => ({
-            title: c.title as string,
-            description: c.description as string,
-            icon: c.icon && typeof c.icon === 'object'
-              ? { url: (c.icon as Record<string, string>).url, alt: (c.icon as Record<string, string>).alt }
-              : null,
-            image: c.image && typeof c.image === 'object'
-              ? { url: (c.image as Record<string, string>).url, alt: (c.image as Record<string, string>).alt }
-              : null,
-          }))}
-          heading={(activitiesPage.categoriesSection as Record<string, string>)?.heading || 'What We Do'}
-        />
-      )}
+      <ActivityCategoryGrid
+        categories={categories.docs.length > 0
+          ? categories.docs.map((c: any) => ({
+              title: c.title as string,
+              description: c.description as string,
+              icon: c.icon && typeof c.icon === 'object'
+                ? { url: (c.icon as Record<string, string>).url, alt: (c.icon as Record<string, string>).alt }
+                : null,
+              image: c.image && typeof c.image === 'object'
+                ? { url: (c.image as Record<string, string>).url, alt: (c.image as Record<string, string>).alt }
+                : null,
+            }))
+          : fallbackCategories
+        }
+        heading={(activitiesPage.categoriesSection as Record<string, string>)?.heading || 'What We Do'}
+      />
 
       {events.docs.length > 0 && (
         <EventsCarousel

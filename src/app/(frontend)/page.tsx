@@ -13,6 +13,12 @@ import { FundraisingProgress } from '@/components/sections/FundraisingProgress'
 import { RecruitmentCTA } from '@/components/sections/RecruitmentCTA'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Container } from '@/components/layout/Container'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Planet Caretakers - Every Action Counts',
+  description: 'Planet Caretakers is a global nonprofit committed to protecting nature through community cleanups, education, and international collaboration.',
+}
 
 export default async function HomePage() {
   let homePage: any = {}
@@ -53,6 +59,34 @@ export default async function HomePage() {
     // Continue with empty/fallback data
   }
 
+  const fallbackStats = [
+    { value: '1000', label: 'Volunteers', suffix: '+' },
+    { value: '44', label: 'Tons of Garbage', suffix: '' },
+    { value: '8', label: 'Countries Worldwide', suffix: '+' },
+    { value: '300', label: 'Cleaning Actions', suffix: '+' },
+  ]
+
+  const fallbackPriorities = [
+    { title: 'Educate & Empower', description: 'We teach people how to care for the planet — and give them tools to act.' },
+    { title: 'Restore Nature', description: 'From cleanups to reforestation, we help ecosystems heal.' },
+    { title: 'Join Forces', description: 'We team up with NGOs, businesses, and governments to go further, faster.' },
+    { title: 'Think Global', description: 'We inspire worldwide responsibility — because Earth belongs to all of us.' },
+    { title: 'Act for the Future', description: 'Our work is built for impact that lasts. No shortcuts, just solutions.' },
+    { title: 'Be Creative', description: 'We rethink waste. We reuse. We turn trash into powerful messages.' },
+    { title: 'Mobilize People', description: 'We build a network of changemakers ready to act — locally and globally.' },
+  ]
+
+  const whatWeDoData = {
+    heading: (homePage.whatWeDo as Record<string, string>)?.heading || 'What is Planet Caretakers about?',
+    description: (homePage.whatWeDo as Record<string, string>)?.description || 'Planet Caretakers is a global nonprofit born in Portugal in 2021, committed to protecting nature through community cleanups, education, and international collaboration. We remove waste from beaches, forests, rivers and cities — but more than that, we raise awareness and empower people and companies to take climate action.',
+  }
+
+  const fallbackTestimonials = [
+    { quote: 'Being part of Planet Caretakers changed how I see my role in protecting the environment. Every cleanup feels like we are healing the Earth together.', author: 'Diogo Amaral', role: 'Volunteer Leader, Figueira da Foz', photo: null },
+    { quote: 'Partnering with Planet Caretakers gave our team a sense of purpose. The impact is real, measurable, and deeply meaningful.', author: 'Studio51', role: 'Community Partner', photo: null },
+    { quote: 'What started as a single beach cleanup became a movement. I am proud to see caretakers in 8 countries and growing.', author: 'Débora Sá', role: 'Founder & CEO', photo: null },
+  ]
+
   const hero = homePage.hero as Record<string, unknown> | undefined
   const primaryCta = hero?.primaryCta as { label: string; url: string } | undefined
   const secondaryCta = hero?.secondaryCta as { label: string; url: string } | undefined
@@ -70,30 +104,30 @@ export default async function HomePage() {
       />
 
       {/* Impact Stats */}
-      {homePage.impactStats && (homePage.impactStats as unknown[]).length > 0 && (
-        <ImpactStats
-          stats={(homePage.impactStats as { value: string; label: string; suffix?: string }[])}
-        />
-      )}
+      <ImpactStats
+        stats={homePage.impactStats && (homePage.impactStats as unknown[]).length > 0
+          ? (homePage.impactStats as { value: string; label: string; suffix?: string }[])
+          : fallbackStats
+        }
+      />
 
       {/* What We Do */}
-      {homePage.whatWeDo && (
-        <section className="py-20">
-          <Container>
-            <SectionHeading
-              title={(homePage.whatWeDo as Record<string, string>).heading || 'What We Do'}
-              subtitle={(homePage.whatWeDo as Record<string, string>).description}
-            />
-          </Container>
-        </section>
-      )}
+      <section className="py-20">
+        <Container>
+          <SectionHeading
+            title={whatWeDoData.heading}
+            subtitle={whatWeDoData.description}
+          />
+        </Container>
+      </section>
 
       {/* Priorities */}
-      {homePage.priorities && (homePage.priorities as unknown[]).length > 0 && (
-        <PriorityCards
-          priorities={(homePage.priorities as { title: string; description: string; icon?: { url: string; alt: string } }[])}
-        />
-      )}
+      <PriorityCards
+        priorities={homePage.priorities && (homePage.priorities as unknown[]).length > 0
+          ? (homePage.priorities as { title: string; description: string; icon?: { url: string; alt: string } }[])
+          : fallbackPriorities
+        }
+      />
 
       {/* Upcoming Events */}
       {events.docs.length > 0 && (
@@ -153,13 +187,35 @@ export default async function HomePage() {
       )}
 
       {/* Testimonials */}
-      {(homePage.testimonials as Record<string, unknown>)?.enabled && (homePage.testimonials as Record<string, unknown>).items && ((homePage.testimonials as Record<string, unknown>).items as unknown[]).length > 0 && (
-        <Testimonials
-          heading={(homePage.testimonials as Record<string, string>).heading}
-          subtitle={(homePage.testimonials as Record<string, string>).subtitle}
-          testimonials={((homePage.testimonials as Record<string, unknown>).items as { quote: string; author: string; role?: string | null; photo?: { url: string; alt?: string } | null }[])}
-        />
-      )}
+      {(() => {
+        const cmsTestimonials = homePage.testimonials as Record<string, unknown> | undefined
+        const hasCmsTestimonials =
+          cmsTestimonials?.enabled &&
+          cmsTestimonials.items &&
+          (cmsTestimonials.items as unknown[]).length > 0
+
+        if (hasCmsTestimonials) {
+          return (
+            <Testimonials
+              heading={(cmsTestimonials as Record<string, string>).heading}
+              subtitle={(cmsTestimonials as Record<string, string>).subtitle}
+              testimonials={(cmsTestimonials!.items as { quote: string; author: string; role?: string | null; photo?: { url: string; alt?: string } | null }[])}
+            />
+          )
+        }
+
+        // Show fallback when DB is empty (no CMS data loaded)
+        if (!cmsTestimonials || Object.keys(homePage).length === 0) {
+          return (
+            <Testimonials
+              heading="Words From Our Community"
+              testimonials={fallbackTestimonials}
+            />
+          )
+        }
+
+        return null
+      })()}
 
       {/* Latest News */}
       {blogPosts.docs.length > 0 && (

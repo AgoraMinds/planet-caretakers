@@ -17,7 +17,7 @@ export const TeamMembers: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', required: true },
     { name: 'role', type: 'text', required: true, label: 'Title / Position' },
-    { name: 'photo', type: 'upload', relationTo: 'media', required: true },
+    { name: 'photo', type: 'upload', relationTo: 'media' },
     { name: 'bio', type: 'textarea', admin: { description: 'Short bio, 2-3 sentences.' } },
     {
       name: 'socialLinks',

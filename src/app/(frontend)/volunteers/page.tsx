@@ -29,6 +29,7 @@ export default async function VolunteersPage() {
       name: l.name as string,
       location: l.location as string,
       country: l.country as string,
+      isPlaceholder: l.isPlaceholder as boolean | undefined,
       photo: l.photo && typeof l.photo === 'object'
         ? { url: (l.photo as Record<string, string>).url, alt: (l.photo as Record<string, string>).alt }
         : null,
@@ -41,6 +42,7 @@ export default async function VolunteersPage() {
       name: l.name as string,
       location: l.location as string,
       country: l.country as string,
+      isPlaceholder: l.isPlaceholder as boolean | undefined,
       photo: l.photo && typeof l.photo === 'object'
         ? { url: (l.photo as Record<string, string>).url, alt: (l.photo as Record<string, string>).alt }
         : null,

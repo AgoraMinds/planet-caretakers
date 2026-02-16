@@ -7,6 +7,10 @@ import { PartnershipBenefits } from '@/components/sections/PartnershipBenefits'
 import { PartnerLogos } from '@/components/sections/PartnerLogos'
 import { LatestNews } from '@/components/sections/LatestNews'
 import { ContactForm } from '@/components/sections/ContactForm'
+import { VideoSection } from '@/components/sections/VideoSection'
+import { Testimonials } from '@/components/sections/Testimonials'
+import { FundraisingProgress } from '@/components/sections/FundraisingProgress'
+import { RecruitmentCTA } from '@/components/sections/RecruitmentCTA'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Container } from '@/components/layout/Container'
 
@@ -120,6 +124,33 @@ export default async function HomePage() {
         />
       )}
 
+      {/* Video Section */}
+      {(homePage.videoSection as Record<string, unknown>)?.enabled && (
+        <VideoSection
+          heading={(homePage.videoSection as Record<string, string>).heading}
+          subtitle={(homePage.videoSection as Record<string, string>).subtitle}
+          videoUrl={(homePage.videoSection as Record<string, string>).videoUrl}
+        />
+      )}
+
+      {/* Fundraising Progress */}
+      {(homePage.fundraising as Record<string, unknown>)?.enabled && (homePage.fundraising as Record<string, unknown>).projects && ((homePage.fundraising as Record<string, unknown>).projects as unknown[]).length > 0 && (
+        <FundraisingProgress
+          heading={(homePage.fundraising as Record<string, string>).heading}
+          subtitle={(homePage.fundraising as Record<string, string>).subtitle}
+          projects={((homePage.fundraising as Record<string, unknown>).projects as { title: string; raised: number; goal: number; currency?: string }[])}
+        />
+      )}
+
+      {/* Testimonials */}
+      {(homePage.testimonials as Record<string, unknown>)?.enabled && (homePage.testimonials as Record<string, unknown>).items && ((homePage.testimonials as Record<string, unknown>).items as unknown[]).length > 0 && (
+        <Testimonials
+          heading={(homePage.testimonials as Record<string, string>).heading}
+          subtitle={(homePage.testimonials as Record<string, string>).subtitle}
+          testimonials={((homePage.testimonials as Record<string, unknown>).items as { quote: string; author: string; role?: string | null; photo?: { url: string; alt?: string } | null }[])}
+        />
+      )}
+
       {/* Latest News */}
       {blogPosts.docs.length > 0 && (
         <LatestNews
@@ -136,6 +167,16 @@ export default async function HomePage() {
               : null,
           }))}
           heading={(homePage.newsSection as Record<string, string>)?.heading || 'Latest News'}
+        />
+      )}
+
+      {/* Recruitment CTA */}
+      {(homePage.recruitmentCta as Record<string, unknown>)?.enabled && (
+        <RecruitmentCTA
+          heading={(homePage.recruitmentCta as Record<string, string>).heading}
+          description={(homePage.recruitmentCta as Record<string, string>).description}
+          buttonLabel={(homePage.recruitmentCta as Record<string, string>).buttonLabel}
+          buttonUrl={(homePage.recruitmentCta as Record<string, string>).buttonUrl}
         />
       )}
 

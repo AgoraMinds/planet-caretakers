@@ -37,6 +37,28 @@ export const PartnersPage: GlobalConfig = {
       ],
     },
     {
+      name: 'originStory',
+      type: 'group',
+      label: 'Where It All Began Section',
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: true },
+        { name: 'heading', type: 'text', defaultValue: 'Where It All Began' },
+        { name: 'subheading', type: 'text', defaultValue: "Let's help together" },
+        { name: 'description', type: 'textarea' },
+        {
+          name: 'stats',
+          type: 'array',
+          label: 'Impact Statistics',
+          maxRows: 6,
+          fields: [
+            { name: 'value', type: 'text', required: true },
+            { name: 'label', type: 'text', required: true },
+            { name: 'suffix', type: 'text' },
+          ],
+        },
+      ],
+    },
+    {
       name: 'cta',
       type: 'group',
       fields: [

@@ -112,6 +112,71 @@ export const HomePage: GlobalConfig = {
       ],
     },
     {
+      name: 'videoSection',
+      type: 'group',
+      label: 'Video Section',
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: false },
+        { name: 'heading', type: 'text', defaultValue: 'Turning Care Into Action' },
+        { name: 'subtitle', type: 'textarea' },
+        { name: 'videoUrl', type: 'text', admin: { description: 'YouTube embed URL or other video platform embed URL' } },
+      ],
+    },
+    {
+      name: 'fundraising',
+      type: 'group',
+      label: 'Fundraising Progress',
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: false },
+        { name: 'heading', type: 'text' },
+        { name: 'subtitle', type: 'textarea' },
+        {
+          name: 'projects',
+          type: 'array',
+          maxRows: 4,
+          fields: [
+            { name: 'title', type: 'text', required: true },
+            { name: 'raised', type: 'number', required: true },
+            { name: 'goal', type: 'number', required: true },
+            { name: 'currency', type: 'text', defaultValue: '$' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'testimonials',
+      type: 'group',
+      label: 'Testimonials Section',
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: false },
+        { name: 'heading', type: 'text', defaultValue: 'Words From Volunteers' },
+        { name: 'subtitle', type: 'textarea' },
+        {
+          name: 'items',
+          type: 'array',
+          maxRows: 6,
+          fields: [
+            { name: 'quote', type: 'textarea', required: true },
+            { name: 'author', type: 'text', required: true },
+            { name: 'role', type: 'text' },
+            { name: 'photo', type: 'upload', relationTo: 'media' },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'recruitmentCta',
+      type: 'group',
+      label: 'Recruitment CTA',
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: false },
+        { name: 'heading', type: 'text', defaultValue: 'Become a Planet Caretaker' },
+        { name: 'description', type: 'textarea' },
+        { name: 'buttonLabel', type: 'text', defaultValue: 'Join Us Today' },
+        { name: 'buttonUrl', type: 'text', defaultValue: '/contact' },
+      ],
+    },
+    {
       name: 'contactCta',
       type: 'group',
       label: 'Contact CTA Section',

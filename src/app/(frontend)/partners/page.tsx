@@ -2,6 +2,7 @@ import { getPayload } from '@/lib/payload'
 import { HeroSection } from '@/components/sections/HeroSection'
 import { PartnerLogos } from '@/components/sections/PartnerLogos'
 import { CTABanner } from '@/components/sections/CTABanner'
+import { OriginStory } from '@/components/sections/OriginStory'
 import { Container } from '@/components/layout/Container'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import type { Metadata } from 'next'
@@ -47,6 +48,16 @@ export default async function PartnersPage() {
             </div>
           </Container>
         </section>
+      )}
+
+      {/* Origin Story */}
+      {(partnersPage.originStory as Record<string, unknown>)?.enabled !== false && (
+        <OriginStory
+          heading={(partnersPage.originStory as Record<string, string>).heading}
+          subheading={(partnersPage.originStory as Record<string, string>).subheading}
+          description={(partnersPage.originStory as Record<string, string>).description}
+          stats={((partnersPage.originStory as Record<string, unknown>).stats as { value: string; label: string; suffix?: string }[]) || undefined}
+        />
       )}
 
       {/* Current Partners */}

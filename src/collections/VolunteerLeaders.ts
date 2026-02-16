@@ -15,6 +15,16 @@ export const VolunteerLeaders: CollectionConfig = {
     delete: ({ req: { user } }) => user?.role === 'admin',
   },
   fields: [
+    {
+      name: 'isPlaceholder',
+      type: 'checkbox',
+      label: 'Looking for Leader (Placeholder)',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Check this to show "Looking for Leader - Contact us" instead of a person',
+      },
+    },
     { name: 'name', type: 'text', required: true },
     { name: 'photo', type: 'upload', relationTo: 'media' },
     { name: 'location', type: 'text', required: true, label: 'City / Area' },

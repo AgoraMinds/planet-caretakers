@@ -74,7 +74,13 @@ export default buildConfig({
     GovernancePage,
   ],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || 'default-secret-change-me-in-production',
+  secret: (() => {
+    const secret = process.env.PAYLOAD_SECRET
+    if (!secret) {
+      throw new Error('PAYLOAD_SECRET environment variable is required. Set it to a random string of at least 32 characters.')
+    }
+    return secret
+  })(),
   typescript: {
     outputFile: path.resolve(dirname, 'src/payload-types.ts'),
   },
